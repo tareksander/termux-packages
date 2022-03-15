@@ -278,6 +278,8 @@ source "$TERMUX_SCRIPTDIR/scripts/build/termux_step_finish_build.sh"
 # shellcheck source=scripts/properties.sh
 . "$TERMUX_SCRIPTDIR/scripts/properties.sh"
 
+TERMUX_PREFIX=${TERMUX_BASE_DIR}/usr-aarch64
+
 if [ "$TERMUX_ON_DEVICE_BUILD" = "true" ]; then
 	# For on device builds cross compiling is not supported.
 	# Target architecture must be same as for environment used currently.
@@ -304,8 +306,6 @@ _show_usage() {
 	echo "  -d Build with debug symbols."
 	echo "  -D Build a disabled package in disabled-packages/."
 	echo "  -f Force build even if package has already been built."
-	[ "$TERMUX_ON_DEVICE_BUILD" = "false" ] && echo "  -i Download and extract dependencies instead of building them."
-	echo "  -I Download and extract dependencies instead of building them, keep existing $TERMUX_BASE_DIR files."
 	echo "  -q Quiet build."
 	echo "  -s Skip dependency check."
 	echo "  -o Specify directory where to put built packages. Default: output/."
@@ -345,6 +345,7 @@ while (($# >= 1)); do
 					termux_error_exit "./build-package.sh: option '-a' is not available for on-device builds"
 				else
 					export TERMUX_ARCH="$1"
+					TERMUX_PREFIX=${TERMUX_BASE_DIR}/usr-${TERMUX_ARCH}
 				fi
 			else
 				termux_error_exit "./build-package.sh: option '-a' requires an argument"
@@ -353,14 +354,6 @@ while (($# >= 1)); do
 		-d) export TERMUX_DEBUG_BUILD=true;;
 		-D) TERMUX_IS_DISABLED=true;;
 		-f) TERMUX_FORCE_BUILD=true;;
-		-i)
-			if [ "$TERMUX_ON_DEVICE_BUILD" = "true" ]; then
-				termux_error_exit "./build-package.sh: option '-i' is not available for on-device builds"
-			else
-				export TERMUX_INSTALL_DEPS=true
-			fi
-			;;
-		-I) export TERMUX_INSTALL_DEPS=true && export TERMUX_NO_CLEAN=true;;
 		-q) export TERMUX_QUIET_BUILD=true;;
 		-s) export TERMUX_SKIP_DEPCHECK=true;;
 		-o)

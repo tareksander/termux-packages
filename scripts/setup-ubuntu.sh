@@ -239,5 +239,8 @@ $SUDO locale-gen --purge en_US.UTF-8
 echo -e 'LANG="en_US.UTF-8"\nLANGUAGE="en_US:en"\n' | $SUDO tee -a /etc/default/locale
 
 . $(dirname "$(realpath "$0")")/properties.sh
-$SUDO mkdir -p $TERMUX_PREFIX
+$SUDO mkdir -p ${TERMUX_BASE_DIR}/usr-i686
+$SUDO mkdir -p ${TERMUX_BASE_DIR}/usr-x86_64
+$SUDO mkdir -p ${TERMUX_BASE_DIR}/usr-arm
+$SUDO mkdir -p ${TERMUX_BASE_DIR}/usr-aarch64
 $SUDO chown -R $(whoami) /data
