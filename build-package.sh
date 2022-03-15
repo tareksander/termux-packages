@@ -278,7 +278,7 @@ source "$TERMUX_SCRIPTDIR/scripts/build/termux_step_finish_build.sh"
 # shellcheck source=scripts/properties.sh
 . "$TERMUX_SCRIPTDIR/scripts/properties.sh"
 
-TERMUX_PREFIX=${TERMUX_BASE_DIR}/usr-aarch64
+TERMUX_PREFIX=${TERMUX_BASE_DIR}/usr-${TERMUX_ARCH:-aarch64}
 
 if [ "$TERMUX_ON_DEVICE_BUILD" = "true" ]; then
 	# For on device builds cross compiling is not supported.
@@ -375,18 +375,6 @@ while (($# >= 1)); do
 done
 unset -f _show_usage
 
-if [ "${TERMUX_INSTALL_DEPS-false}" = "true" ]; then
-	# Setup PGP keys for verifying integrity of dependencies.
-	# Keys are obtained from our keyring package.
-	gpg --list-keys 2C7F29AE97891F6419A9E2CDB0076E490B71616B > /dev/null 2>&1 || {
-		gpg --import "$TERMUX_SCRIPTDIR/packages/termux-keyring/grimler.gpg"
-		gpg --no-tty --command-file <(echo -e "trust\n5\ny")  --edit-key 2C7F29AE97891F6419A9E2CDB0076E490B71616B
-	}
-	gpg --list-keys CC72CF8BA7DBFA0182877D045A897D96E57CF20C > /dev/null 2>&1 || {
-		gpg --import "$TERMUX_SCRIPTDIR/packages/termux-keyring/termux-autobuilds.gpg"
-		gpg --no-tty --command-file <(echo -e "trust\n5\ny")  --edit-key CC72CF8BA7DBFA0182877D045A897D96E57CF20C
-	}
-fi
 
 for ((i=0; i<${#PACKAGE_LIST[@]}; i++)); do
 	# Following commands must be executed under lock to prevent running

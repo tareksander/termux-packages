@@ -18,7 +18,7 @@ termux_step_setup_variables() {
 	if [ "$TERMUX_ON_DEVICE_BUILD" = "true" ]; then
 		# For on-device builds cross-compiling is not supported so we can
 		# store information about built packages under $TERMUX_TOPDIR.
-		TERMUX_BUILT_PACKAGES_DIRECTORY="$TERMUX_TOPDIR/.built-packages"
+		TERMUX_BUILT_PACKAGES_DIRECTORY="$TERMUX_TOPDIR/.built-packages-$TERMUX_ARCH"
 		TERMUX_NO_CLEAN="true"
 
 		# On-device builds without termux-exec are unsupported.
@@ -26,7 +26,7 @@ termux_step_setup_variables() {
 			termux_error_exit "On-device builds without termux-exec are not supported."
 		fi
 	else
-		TERMUX_BUILT_PACKAGES_DIRECTORY="/data/data/.built-packages"
+		TERMUX_BUILT_PACKAGES_DIRECTORY="/data/data/.built-packages-$TERMUX_ARCH"
 	fi
 
 	# TERMUX_PKG_MAINTAINER should be explicitly set in build.sh of the package.

@@ -216,6 +216,10 @@ PACKAGES+=" gcc-arm-none-eabi"
 # Required by picolisp (and maybe a few others in future)
 PACKAGES+=" llvm-12"
 
+
+# Needed to compile WINE
+PACKAGES+=" mingw-w64"
+
 # Do not require sudo if already running as root.
 if [ "$(id -u)" = "0" ]; then
 	SUDO=""
